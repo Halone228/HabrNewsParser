@@ -20,7 +20,7 @@ class Scrapper:
     def scrape(self):
         last_page = self.get_last_page()
         end_arr = []
-        for page in range(1,2):
+        for page in tqdm(range(1, last_page+1)):
             print('Parsing pages')
             raw_page = self.parser.parse(page)
             soup = BeautifulSoup(raw_page,"lxml")
