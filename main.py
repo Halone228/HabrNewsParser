@@ -9,14 +9,6 @@ class MainApp:
 
     def run(self):
         items_list = self.scrapper.scrape()
-        for item in tqdm(items_list):
-            post = Post()
-            post.description = item['description']
-            post.img_src = item.get('img_src','')
-            post.snippets = item['snippets']
-            post.title = item['title']
-            post.raw_html = item['raw_html']
-            post.save()
 
 
 if __name__ == "__main__":
