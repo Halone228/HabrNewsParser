@@ -8,6 +8,7 @@ from database import Post
 
 class Scrapper:
     page_num = 0
+    current_run = True
     def __init__(self):
         self.parser = Parser()
 
@@ -22,6 +23,8 @@ class Scrapper:
         last_page = self.get_last_page()
         end_arr = []
         for page in tqdm(range(1, last_page+1)):
+            if not self.current_run:
+                return end_arr
             raw_page = self.parser.parse(page)
             soup = BeautifulSoup(raw_page,"lxml")
             end_arr += list(self.scrape_pages(soup))
@@ -56,6 +59,9 @@ class Scrapper:
         return str(soup.find('div',class_='tm-page__main'))
 
     def save_to_database(self,item):
+        query = Post.select().where(Post.title==item['title'])
+        if query.exists():
+            self.current_run = False
         post = Post()
         post.description = item['description']
         post.img_src = item.get('img_src', '')
